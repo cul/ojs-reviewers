@@ -4,9 +4,22 @@ import('lib.pkp.classes.form.validation.FormValidator');
 
 class ReviewersPlugin extends GenericPlugin { 
 
+    private $reviewers_fields = array();
+    private $param_names = array('FirstName','LastName','Email','Preferred','Institution');
+
+
     function register($category, $path, $mainContextId = null) { 
         $success = parent::register($category, $path, $mainContextId);
         if ($success && $this->getEnabled($mainContextId)) { 
+
+            if(!$this->reviewers_fields){
+                foreach($this->param_names as $param_name){
+                    for ($i = 1; $i < 4; $i++) {
+                        $key_name = 'reviewer'.$i.$param_name;
+                        $this->reviewers_fields[] = $key_name;
+                    }
+                }
+            }
 
             HookRegistry::register('Templates::Submission::SubmissionMetadataForm::AdditionalMetadata', array($this, 'renderReviewersForm'));
 
@@ -56,6 +69,7 @@ class ReviewersPlugin extends GenericPlugin {
     function renderReviewersForm($hookName, $params){
         $smarty =& $params[1];
         $output =& $params[2];
+        $smarty->assign('reviewerFieldNames', $this->reviewers_fields);
         $output .= $smarty->fetch($this->getTemplatePath() . 'reviewers.tpl');
         return false;        
     }
@@ -67,8 +81,10 @@ class ReviewersPlugin extends GenericPlugin {
     function reviewersInitData($hookName, $params) {
         $form =& $params[0];
         $article = $form->submission;
-        $reviewer1FirstName = $article->getData('reviewer1FirstName');
-        $form->setData('reviewer1FirstName', $reviewer1FirstName);
+        foreach($this->reviewers_fields as $r_field){
+            $rf = $article->getData($r_field);
+            $form->setData($r_field, $rf);
+        }
         return false;
     }
 
@@ -78,8 +94,10 @@ class ReviewersPlugin extends GenericPlugin {
      */
     function readReviewersUserVars($hookName, $params) {
         $userVars =& $params[1];
-        $userVars[] = 'reviewer1FirstName';
-        return false;
+        foreach($this->reviewers_fields as $r_field){
+            $userVars[] = $r_field;
+        }
+        return false;        
     }
 
 
@@ -88,7 +106,9 @@ class ReviewersPlugin extends GenericPlugin {
      */
     function addReviewersFieldNames($hookName, $params) {
         $fields =& $params[1];
-        $fields[] = 'reviewer1FirstName';
+        foreach($this->reviewers_fields as $r_field){
+            $fields[] = $r_field;
+        }
         return false;
     }
 
@@ -99,9 +119,12 @@ class ReviewersPlugin extends GenericPlugin {
     function reviewersExecute($hookName, $params) {
         $form =& $params[0];
         $article =& $params[1];
-        $rev1name = $form->getData('reviewer1FirstName');
-        $article->setData('reviewer1FirstName', $rev1name);
-        return false;    }
+        foreach($this->reviewers_fields as $r_field){
+            $rf = $form->getData($r_field);
+            $article->setData($r_field, $rf);
+        }
+        return false;    
+    }
 
 
 /**
@@ -129,14 +152,11 @@ class ReviewersPlugin extends GenericPlugin {
     //         $form->addCheck(new FormValidator($this, 'commentsToEditor', 'required', 'author.submit.form.coverLetterRequired'));
     // }
 
-    // /**
-    //  * Add preferred reviewer info to the article
-    //  */
 
     // function manageReviewers($hookName, $args) { 
     //     $param_names = array('FirstName','LastName','Email','Preferred','Institution');
     //     foreach($param_names as $param_name){
-    //         for ($i = 1; $i < 7; $i++) {
+    //         for ($i = 1; $i < 4; $i++) {
     //             $key_name = 'reviewer'.$i.$param_name;
     //             if($hookName == 'articledao::getLocaleFieldNames'){
     //                 $args[0]->_data[$key_name] = $args[0]->article->getData($key_name);
