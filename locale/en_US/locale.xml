@@ -14,6 +14,7 @@
 <locale name="en_US" full_name="U.S. English">
 	<message key="author.submit.reviewers">Preferred Reviewers</message>
 	<message key="author.submit.reviewers.description">Author recommends reviewer.</message>
+  <message key="author.submit.reviewers.name">Name</message>
   <message key="author.submit.reviewers.firstName">First Name</message>
   <message key="author.submit.reviewers.lastName">Last Name</message>
   <message key="author.submit.reviewers.institution">Institution</message>

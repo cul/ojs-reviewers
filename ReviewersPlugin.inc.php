@@ -33,6 +33,8 @@ class ReviewersPlugin extends GenericPlugin {
 
             HookRegistry::register('articledao::getAdditionalFieldNames', array($this, 'addReviewersFieldNames'));
 
+            HookRegistry::register('LoadComponentHandler', array($this, 'setupGridHandler'));
+
 
             return true; 
         } 
@@ -127,16 +129,33 @@ class ReviewersPlugin extends GenericPlugin {
     }
 
 
+    /**
+     * Permit requests to the custom block grid handler
+     * @param $hookName string The name of the hook being invoked
+     * @param $args array The parameters to the invoked hook
+     */
+    function setupGridHandler($hookName, $params) {
+        $component =& $params[0];
+        if ($component == 'plugins.generic.reviewers.controllers.grid.ReviewersGridHandler') {
+            import($component);
+            $className = array_pop(explode('.', $component));
+            $className::setPlugin($this);
+            return true;
+        }
+        return false;
+    }
+
+
 /**
      * Add check/validation for the projectID field (= 6 numbers) on form instantiation
      */
-    function reviewersCheck($hookName, $params) {
+    // function reviewersCheck($hookName, $params) {
         // $form =& $params[0];
         // if (get_class($form) == 'SubmissionSubmitStep3Form'){
         //     $form->addCheck(new FormValidator($this, 'reviewer1FirstName', 'required', 'author.submit.form.reviewerFirstNameRequired'));
         // }
-        return false;
-    }    
+    //     return false;
+    // }    
 
 
 
