@@ -145,49 +145,5 @@ class ReviewersPlugin extends GenericPlugin {
         return false;
     }
 
-
-/**
-     * Add check/validation for the projectID field (= 6 numbers) on form instantiation
-     */
-    // function reviewersCheck($hookName, $params) {
-        // $form =& $params[0];
-        // if (get_class($form) == 'SubmissionSubmitStep3Form'){
-        //     $form->addCheck(new FormValidator($this, 'reviewer1FirstName', 'required', 'author.submit.form.reviewerFirstNameRequired'));
-        // }
-    //     return false;
-    // }    
-
-
-
-    // function addFormChecks($hookName, $args){
-    //     $reviewersMinRequired = 3;
-    //     $form = $args[0];
-    //     for ($i=1; $i <= $reviewersMinRequired; $i++) {
-    //         $form->addCheck(new FormValidator($this, 'reviewer'.$i.'FirstName', 'required', 'author.submit.form.reviewerFirstNameRequired'));
-    //         $form->addCheck(new FormValidator($this, 'reviewer'.$i.'LastName', 'required', 'author.submit.form.reviewerLastNameRequired'));
-    //         $form->addCheck(new FormValidator($this, 'reviewer'.$i.'Institution', 'required', 'author.submit.form.reviewerInstitutionRequired'));
-    //         $form->addCheck(new FormValidator($this, 'reviewer'.$i.'Email', 'required', 'author.submit.form.reviewerEmailRequired'));
-    //     }
-    //         $form->addCheck(new FormValidator($this, 'commentsToEditor', 'required', 'author.submit.form.coverLetterRequired'));
-    // }
-
-
-    // function manageReviewers($hookName, $args) { 
-    //     $param_names = array('FirstName','LastName','Email','Preferred','Institution');
-    //     foreach($param_names as $param_name){
-    //         for ($i = 1; $i < 4; $i++) {
-    //             $key_name = 'reviewer'.$i.$param_name;
-    //             if($hookName == 'articledao::getLocaleFieldNames'){
-    //                 $args[0]->_data[$key_name] = $args[0]->article->getData($key_name);
-    //                 //following openaire with hook name, it was 'articledao::getLocaleFieldNames'
-    //             }elseif ($hookName == 'submissionsubmitstep1form::execute' 
-    //                 || $hookName == 'submissionsubmitstep1form::readuservars') {
-    //                 $args[1][] = $key_name;
-    //             }
-    //         }
-    //     }
-    //     return false; 
-    // }   
-
 } 
 ?>
